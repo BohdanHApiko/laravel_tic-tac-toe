@@ -14,11 +14,19 @@ class GameController extends Controller
 {
     protected $gameService;
 
+    /**
+     * @param GameServiceInterface $gameService
+     */
     public function __construct(GameServiceInterface $gameService)
     {
         $this->gameService = $gameService;
     }
 
+    /**
+     * Returns current game state
+     *
+     * @return JsonResponse
+     */
     public function get(): JsonResponse
     {
         $game = $this->gameService->start();
@@ -26,7 +34,13 @@ class GameController extends Controller
         return response()->json(new GameResource($game));
     }
 
-    public function placePiece(PlacePieceRequest $request)
+    /**
+     * Handles piece placement
+     *
+     * @param PlacePieceRequest $request
+     * @return JsonResponse
+     */
+    public function placePiece(PlacePieceRequest $request): JsonResponse
     {
         $validatedData = $request->validated();
 
@@ -35,14 +49,24 @@ class GameController extends Controller
         return response()->json(new GameResource($game));
     }
 
-    public function restart()
+    /**
+     * Restarts a game
+     *
+     * @return JsonResponse
+     */
+    public function restart(): JsonResponse
     {
         $game = $this->gameService->restart();
 
         return response()->json(new GameResource($game));
     }
 
-    public function delete()
+    /**
+     * Deletes current game state
+     *
+     * @return JsonResponse
+     */
+    public function delete(): JsonResponse
     {
         $game = $this->gameService->reset();
 

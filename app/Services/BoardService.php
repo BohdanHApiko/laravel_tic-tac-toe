@@ -59,7 +59,17 @@ class BoardService implements BoardServiceInterface
         return false;
     }
 
-    public function update($board, $player, $x, $y): array
+    /**
+     * Updates board state
+     *
+     * @param array $board
+     * @param string $player
+     * @param integer $x
+     * @param integer $y
+     * @throws InvalidMovePlaceTakenException
+     * @return array
+     */
+    public function update(array $board, string $player, int $x, int $y): array
     {
         if (!empty($board[$x][$y])) {
             throw new InvalidMovePlaceTakenException();

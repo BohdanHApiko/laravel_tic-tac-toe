@@ -10,5 +10,6 @@ interface GameServiceInterface
     function reset(): Model;
     function restart(): Model;
     function createNewgame(): Model;
+    function makeMove(string $player, int $x, int $y): Model;
     function getRandomPlayerLetter(): string;
 }

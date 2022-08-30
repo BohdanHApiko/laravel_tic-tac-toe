@@ -151,9 +151,11 @@ class GameService implements GameServiceInterface
      * @param string $player
      * @param int $x
      * @param int $y
-     * @return void
+     * @throws ModelNotFoundException
+     * @throws OutOfTurnMoveException
+     * @return Game
      */
-    public function makeMove(string $player, int $x, int $y)
+    public function makeMove(string $player, int $x, int $y): Game
     {
         $game = $this->getExistingGame();
 
