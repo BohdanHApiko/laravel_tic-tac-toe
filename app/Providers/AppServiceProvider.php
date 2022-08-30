@@ -2,6 +2,10 @@
 
 namespace App\Providers;
 
+use App\Interfaces\BoardServiceInterface;
+use App\Interfaces\GameServiceInterface;
+use App\Services\BoardService;
+use App\Services\GameService;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -23,6 +27,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        $this->app->bind(GameServiceInterface::class, GameService::class);
+        $this->app->bind(BoardServiceInterface::class, BoardService::class);
     }
 }

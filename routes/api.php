@@ -20,6 +20,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('/', [GameController::class, 'get']);
-Route::post('/{piece}', [GameController::class, 'placePiece']);
 Route::post('/restart', [GameController::class, 'restart']);
+Route::post('/{piece}', [GameController::class, 'placePiece']);
 Route::delete('/', [GameController::class, 'delete']);
