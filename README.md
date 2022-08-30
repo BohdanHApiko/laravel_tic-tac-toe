@@ -1,64 +1,134 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+## Introduction
+This project should allow user to play a tic-tac-toe via API calls
+## Usage
+### Available API endpoints:
+API prefix is `/api/`
+- `GET /` - Sending requests there should show existing match or create a new one if existing does not exists
+```
+{
+    "board": [
+        [
+            "",
+            "",
+            ""
+        ],
+        [
+            "",
+            "",
+            ""
+        ],
+        [
+            "",
+            "",
+            ""
+        ]
+    ],
+    "score": {
+        "x": 0,
+        "o": 0
+    },
+    "currentTurn": "x",
+    "victory": ""
+}
+```
+- `DELETE /` - Will clear board and score and return next player turn
+```
+{
+    "currentTurn": "x"
+}
+```
+- `POST /{:piece}` with a body payload of `{"x": int, "y": int}` - Will place a {:piece} on the board if it can be placed
+- - - This Endpoint will do some validation to ensure correcnt user is making a move and if place he wants to use is not occupied
+- - Status codes are:
+- - - 200 - OK
+- - - 406 - Wrong user turn
+- - - 409 - Cell is occupied :(
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+```
+{
+    "board": [
+        [
+            "",
+            "",
+            ""
+        ],
+        [
+            "",
+            "",
+            ""
+        ],
+        [
+            "",
+            "x",
+            ""
+        ]
+    ],
+    "score": {
+        "x": 0,
+        "o": 0
+    },
+    "currentTurn": "o",
+    "victory": ""
+}
+```
+- `POST /restart` - Will refresh the board, update the scores if there was a winner after a last move.
+```
+{
+    "board": [
+        [
+            "",
+            "",
+            ""
+        ],
+        [
+            "",
+            "",
+            ""
+        ],
+        [
+            "",
+            "",
+            ""
+        ]
+    ],
+    "score": {
+        "x": 0,
+        "o": 1
+    },
+    "currentTurn": "o",
+    "victory": ""
+}
+```
 
-## About Laravel
+## Testing
+For local development I've used Docker
+Docker repo: https://github.com/BohdanHApiko/docker-php81-fpm-mariadb-nginx-adminer
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+To execute test run `php artisan tests`
+- Hopefully it will look something similar
+```
+   PASS  Tests\Unit\BoardServiceTest
+  ✓ winning condition
+  ✓ winning condition with data set #1
+  ✓ winning condition with data set #2
+  ✓ winning condition with data set #3
+  ✓ not won condition
+  ✓ not won condition with data set #1
+  ✓ not won condition with data set #2
+  ✓ not won condition with data set #3
+  ✓ if board can be updated
+  ✓ if throws exception when updated with incorrect data
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+   PASS  Tests\Feature\GameControllerTest
+  ✓ get game request endpoint is accessible
+  ✓ make sure json response has correct structure
+  ✓ place piece success
+  ✓ place piece success win condition
+  ✓ place piece place already taken error
+  ✓ place piece wrong turn error
+  ✓ reset board and score calculation
 
-## Learning Laravel
-
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
-
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-## Laravel Sponsors
-
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
-
-### Premium Partners
-
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+  Tests:  17 passed
+  Time:   0.28s
+  ```
