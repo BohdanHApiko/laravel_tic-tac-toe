@@ -17,8 +17,8 @@ class GameResource extends JsonResource
         return [
             'board' => $this->board_state,
             'score' => [
-                'x' => $this->scoreX,
-                'o' => $this->scoreO
+                'x' => $this->score_x,
+                'o' => $this->score_o
             ],
             'currentTurn' => $this->current_turn,
             'victory' => $this->winner
