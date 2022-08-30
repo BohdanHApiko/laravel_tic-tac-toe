@@ -2,9 +2,12 @@
 
 namespace App\Services;
 
+use App\Exceptions\InvalidMovePlaceTakenException;
 use App\Models\Game;
 use App\Interfaces\GameServiceInterface;
 use App\Interfaces\BoardServiceInterface;
+use App\Exceptions\OutOfTurnMoveException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class GameService implements GameServiceInterface
 {
@@ -43,6 +46,11 @@ class GameService implements GameServiceInterface
         return $game;
     }
 
+    /**
+     * Restarts a game
+     *
+     * @return Game
+     */
     public function restart(): Game
     {
         $game = $this->getExistingGame();
@@ -139,9 +147,69 @@ class GameService implements GameServiceInterface
         return $game;
     }
 
+    /**
+     * Undocumented function
+     *
+     * @return array
+     */
     public function getAvailablePlayerLetters()
     {
         return $this->playersLetters;
+    }
+
+    /**
+     * Making a move
+     *
+     * @param string $player
+     * @param int $x
+     * @param int $y
+     * @return void
+     */
+    public function makeMove(string $player, int $x, int $y)
+    {
+        $game = $this->getExistingGame();
+
+        if (!$game) {
+            throw new ModelNotFoundException();
+        }
+
+        if ($game->winner) {
+            return $game;
+        }
+
+        if ($game->current_turn !== $player) {
+            throw new OutOfTurnMoveException();
+        }
+
+        $board = $this->boardService->update($game->board_state, $player, $x, $y);
+
+        $game->fill([
+            'board_state' => $board,
+            'current_turn' => $this->getNextPlayerLetter($player)
+        ]);
+
+        if ($this->boardService->checkIfWon($board)) {
+            $game->fill([
+                'winner' => $player
+            ]);
+        }
+
+        $game->save();
+
+        return $game;
+    }
+    
+    /**
+     * Return next player letter
+     *
+     * @param string $currentLetter
+     * @return string
+     */
+    public function getNextPlayerLetter(string $currentLetter): string
+    {
+        $filteredArray = array_diff($this->getAvailablePlayerLetters(), [$currentLetter]);
+    
+        return reset($filteredArray);
     }
 
     /**
@@ -151,6 +219,6 @@ class GameService implements GameServiceInterface
      */
     public function getRandomPlayerLetter(): string
     {
-        return $this->getAvailablePlayerLetters()[array_rand($this->getAvailablePlayerLetters)];
+        return $this->getAvailablePlayerLetters()[array_rand($this->getAvailablePlayerLetters())];
     }
 }

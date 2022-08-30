@@ -30,7 +30,9 @@ class GameController extends Controller
     {
         $validatedData = $request->validated();
 
-        dd($validatedData);
+        $game = $this->gameService->makeMove($validatedData['piece'], $validatedData['x'], $validatedData['y']);        
+    
+        return response()->json(new GameResource($game));
     }
 
     public function restart()
