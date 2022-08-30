@@ -18,8 +18,8 @@ return new class extends Migration
             $table->json('board_state');
             $table->char('current_turn', 1)->nullable();
             $table->char('winner', 1)->nullable();
-            $table->smallInteger('scoreX')->default(0);
-            $table->smallInteger('scoreO')->default(0);
+            $table->smallInteger('score_x')->default(0);
+            $table->smallInteger('score_o')->default(0);
             
             $table->timestamps();
         });
