@@ -37,13 +37,7 @@ class GameService implements GameServiceInterface
      */
     public function start(): Game
     {
-        $game = $this->getExistingGame();
-
-        if (!$game) {
-            $game = $this->createNewgame();
-        }
-
-        return $game;
+        return $this->getExistingGame() ?? $this->createNewgame(); 
     }
 
     /**
@@ -93,13 +87,7 @@ class GameService implements GameServiceInterface
      */
     public function getExistingGame(): ?Game
     {
-        $game = Game::first();
-
-        if ($game) {
-            return $game;
-        }
-
-        return null;
+        return Game::first() ?? null;
     }
 
     /**
