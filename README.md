@@ -1,6 +1,9 @@
 ## Introduction
 This project should allow user to play a tic-tac-toe via API calls
 ## Usage
+- Copy .env.example to .env and fill in neccessary information
+- Run app locally
+- Apply migration `php artisan migrate`
 ### Available API endpoints:
 API prefix is `/api/`
 - `GET /` - Sending requests there should show existing match or create a new one if existing does not exists
